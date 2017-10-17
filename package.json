@@ -1,0 +1,65 @@
+{
+  "name": "@darkobits/is-dev",
+  "version": "0.0.0",
+  "description": "Check if your package is being installed locally or by another package.",
+  "license": "WTFPL",
+  "contributors": [
+    {
+      "name": "Joshua Martin",
+      "email": "joshua@frontlawn.net"
+    }
+  ],
+  "keywords": [
+    "development",
+    "dev",
+    "npm",
+    "install",
+    "local"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darkobits/dev-prepare.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "bin": {
+    "if-dev": "./dist/bin/if-dev.js"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "lint": "xo",
+    "prebuild": "run-p clean lint",
+    "build": "babel src --out-dir dist",
+    "build:watch": "npm run build -- --watch",
+    "prepare": "npm run build",
+    "prepublishOnly": "run-s lint build",
+    "prebump": "npm run prepublishOnly",
+    "bump": "standard-version",
+    "bump:beta": "standard-version --prerelease=beta"
+  },
+  "dependencies": {
+    "cross-spawn": "^5.1.0",
+    "find-root": "^1.1.0",
+    "npmlog": "^4.1.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "npm-run-all": "^4.1.1",
+    "rimraf": "^2.6.2",
+    "standard-version": "^4.2.0",
+    "xo": "^0.18.2"
+  },
+  "xo": {
+    "env": [
+      "node"
+    ],
+    "space": true,
+    "rules": {
+      "import/no-unassigned-import": "off",
+      "no-multiple-empty-lines": "off"
+    }
+  }
+}
