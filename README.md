@@ -99,7 +99,7 @@ With the above configuration, your package's `prepare` script _will_ run twice (
 [david-dev-img]: https://img.shields.io/david/dev/darkobits/is-dev.svg?style=flat-square
 [david-dev-url]: https://david-dm.org/darkobits/is-dev?type=dev
 
-[cc-img]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg
+[cc-img]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=flat-square
 [cc-url]: https://github.com/conventional-changelog/standard-version
 
 [xo-img]: https://img.shields.io/badge/code_style-XO-e271a5.svg?style=flat-square
