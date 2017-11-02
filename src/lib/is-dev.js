@@ -14,7 +14,10 @@ import log from './log';
 function isDev() {
   try {
     const ourPackageJsonPath = findRoot(__dirname);
+    log.silly('isDev', 'Found our package.json at:', ourPackageJsonPath);
+
     const parentPackageJsonPath = findRoot(resolve(ourPackageJsonPath, '..'));
+    log.silly('isDev', 'Found parent package.json at:', parentPackageJsonPath);
 
     if (parentPackageJsonPath) {
       log.verbose('isDev', 'This is not a development install.');
