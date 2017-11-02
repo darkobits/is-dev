@@ -16,10 +16,13 @@ function isDev() {
     const ourPackageJsonPath = findRoot(__dirname);
     log.silly('isDev', 'Found our package.json at:', ourPackageJsonPath);
 
-    const parentPackageJsonPath = findRoot(resolve(ourPackageJsonPath, '..'));
-    log.silly('isDev', 'Found parent package.json at:', parentPackageJsonPath);
+    const cwdPackageJsonPath = findRoot(resolve(process.cwd()));
+    log.verbose('isDev', 'Found CWD package.json at:', cwdPackageJsonPath);
 
-    if (parentPackageJsonPath) {
+    const hostPackageJsonPath = findRoot(resolve(cwdPackageJsonPath, '..'));
+    log.verbose('isDev', 'Found host\'s package.json at:', hostPackageJsonPath);
+
+    if (hostPackageJsonPath) {
       log.verbose('isDev', 'This is not a development install.');
       return false;
     }

@@ -11,7 +11,11 @@ import log from './log';
  */
 export default async function runCommand(command, args) {
   return new Promise((resolve, reject) => {
-    log.info('runCommand', `Running command "${command} ${args.join(' ')}".`);
+    if (!command) {
+      resolve();
+    }
+
+    log.info('runCommand', `Running command "${[command].concat(args.join(' '))}".`);
 
     const child = spawn(command, args, {stdio: 'inherit'});
 
