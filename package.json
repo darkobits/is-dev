@@ -58,6 +58,7 @@
     ],
     "space": true,
     "rules": {
+      "capitalized-comments": "off",
       "import/no-unassigned-import": "off",
       "no-multiple-empty-lines": "off"
     }

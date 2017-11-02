@@ -11,12 +11,12 @@ import log from './log';
  */
 export default async function runCommand(command, args) {
   return new Promise((resolve, reject) => {
-    log.info('run', `Running command "${command} ${args.join(' ')}".`);
+    log.info('runCommand', `Running command "${command} ${args.join(' ')}".`);
 
     const child = spawn(command, args, {stdio: 'inherit'});
 
     function onError(err) {
-      log.error('spawn', `Encountered an error while trying to run "${command}":`, err.message);
+      log.error('runCommand', `Encountered an error while trying to run "${command}":`, err.message);
       reject(err);
     }
 

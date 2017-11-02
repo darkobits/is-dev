@@ -4,18 +4,28 @@ import log from './log';
 
 
 /**
- * Recursively searches upwards in the directory tree, stopping if a directory
- * with a package.json file is found. If one is found, then we are being
- * installed by another package. If not, this is a local install.
+ * Determines if there is more than 1 package.json between us and the top-level
+ * directory in the filesystem. If there is, we can assume we have been
+ * installed by another package and are therefore a "development" install. If
+ * not, then we can assume we are a development install.
  *
  * @return {boolean}
  */
 function isDev() {
   try {
-    return !findRoot(resolve(process.cwd(), '..'));
-  } catch (err) {
-    log.verbose('find-root', err.message);
+    const ourPackageJsonPath = findRoot(__dirname);
+    const parentPackageJsonPath = findRoot(resolve(ourPackageJsonPath, '..'));
+
+    if (parentPackageJsonPath) {
+      log.verbose('isDev', 'This is not a development install.');
+      return false;
+    }
+
+    log.verbose('isDev', 'This is a development install.');
     return true;
+  } catch (err) {
+    log.error('isDev', err.message);
+    throw err;
   }
 }
 
