@@ -12,7 +12,7 @@ import log from './log';
 export default async function runCommand(command, args) {
   return new Promise((resolve, reject) => {
     if (!command) {
-      resolve();
+      return resolve();
     }
 
     log.info('runCommand', `Running command "${[command].concat(args.join(' '))}".`);

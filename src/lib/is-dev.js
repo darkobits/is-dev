@@ -13,22 +13,36 @@ import log from './log';
  */
 function isDev() {
   try {
-    const ourPackageJsonPath = findRoot(__dirname);
-    log.silly('isDev', 'Found our package.json at:', ourPackageJsonPath);
+    // This will always be us.
+    const ourRoot = findRoot(__dirname);
+    const ourName = require(resolve(ourRoot, 'package.json')).name;
+    log.silly('isDev', `"${ourName}" root: ${ourRoot}`);
 
-    const cwdPackageJsonPath = findRoot(resolve(process.cwd()));
-    log.verbose('isDev', 'Found CWD package.json at:', cwdPackageJsonPath);
+    // This will be us when we are being developed locally and our dependant
+    // when they are being developed locally.
+    const dependantRoot = findRoot(resolve(process.cwd()));
+    const dependantName = require(resolve(dependantRoot, 'package.json')).name;
 
-    const hostPackageJsonPath = findRoot(resolve(cwdPackageJsonPath, '..'));
-    log.verbose('isDev', 'Found host\'s package.json at:', hostPackageJsonPath);
-
-    if (hostPackageJsonPath) {
-      log.verbose('isDev', 'This is not a development install.');
-      return false;
+    if (dependantName === ourName) {
+      return true;
     }
 
-    log.verbose('isDev', 'This is a development install.');
-    return true;
+    log.silly('isDev', `"${dependantName}" root: ${dependantRoot}`);
+
+    // This will be falsy when our dependant is being developed locally and our
+    // dependant's dependant when our dependant is being installed.
+    const hostRoot = findRoot(resolve(dependantRoot, '..'));
+
+    if (!hostRoot) {
+      log.verbose('isDev', `${dependantName} is being installed locally.`);
+      return true;
+    }
+
+    const hostName = require(resolve(hostRoot, 'package.json')).name;
+
+    log.silly('isDev', `"${hostName}" root: ${hostRoot}`);
+    log.verbose('isDev', `"${dependantName}" is being installed by "${hostName}".`);
+    return false;
   } catch (err) {
     log.error('isDev', err.message);
     throw err;
