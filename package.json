@@ -25,7 +25,8 @@
   ],
   "main": "./dist/index.js",
   "bin": {
-    "if-dev": "./dist/bin/if-dev.js"
+    "if-dev": "./dist/bin/if-dev.js",
+    "if-not-dev": "./dist/bin/if-not-dev.js"
   },
   "scripts": {
     "clean": "rimraf dist",
