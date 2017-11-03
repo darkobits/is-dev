@@ -88,13 +88,18 @@ We can use the `if-dev` executable to address this problem:
 }
 ```
 
-This will ensure that for local development, the package is prepared **before** we try to execute `postinstall.js`. When the package is being installed by consumers, `if-dev` will simply no-op and `postinstall.js` will be run immediately. 🙌
+This will ensure that for local development, the package is prepared **before** we try to execute `postinstall.js`. When the package is being installed by consumers, `if-dev` will simply no-op and `postinstall.js` will be run immediately.
+
+<p align="center">
+  <br>
+  <img width="22" height="22" src="https://user-images.githubusercontent.com/441546/32366171-339ec368-c03a-11e7-854a-48ee2e06961d.png">
+  <br>
+  <br>
+</p>
 
 > **Wont this result in "prepare" being executed twice?**
 >
 > Yes. However, this is probably a fair trade-off given the alternative.
-
----
 
 Furthermore, it may be the case that we don't want to perform our `postinstall` routine(s) _at all_ when developing locally. In this case, we can use `if-not-dev` to gate the entire `postinstall` script:
 
