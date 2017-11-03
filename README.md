@@ -2,25 +2,19 @@
 
 # is-dev
 
-This package provides a way to determine if your package is being installed locally or by another package.
+This package provides a way to determine if your package is being installed locally (ex: `npm install`) or by another package (ex: `npm install <your package>`).
 
 ## Installation
 
 ```bash
-$ yarn add @darkobits/is-dev
-```
-
-or
-
-```bash
-$ npm install --save @darkobits/is-dev
+$ npm install @darkobits/is-dev
 ```
 
 ## Usage
 
-This package exports a predicate constant and a binary, `if-dev`.
+This package exports a constant and provides two executables: `if-dev` and `if-not-dev`.
 
-### Predicate
+### Constant
 
 > `postinstall.js`
 
@@ -34,7 +28,7 @@ if (IS_DEV) {
 }
 ```
 
-### Binary
+### Executables
 
 `if-dev` checks if the package has been installed locally or by another package. If it was installed locally, it will run the provided command.
 
@@ -49,19 +43,38 @@ if (IS_DEV) {
 }
 ```
 
-## Use Case
+`if-not-dev` is the inverse of `if-dev`.
+
+## Use Cases
 
 NPM runs the following [lifecycle scripts](https://docs.npmjs.com/misc/scripts) (among others) in the following order:
 
-|Script|Runs On Install Type|Typical Use Case|
+|Script|Runs|Typical Use Case|
 |---|---|---|
-|`install`|Local & Development|Set up package for use by consuming packages.|
-|`postinstall`|Local & Development|See above.|
-|`prepare`|Development Only|Generate package's build artifacts.|
+|`install`|Always|Set up package for use by consuming packages.|
+|`postinstall`|Always|See above.|
+|`prepare`|Development (`npm install`) Only|Generate package's build artifacts.|
 
-This is sub-optimal, because it leaves developers with no way to generate build artifacts on local installations before they need to be used by `install` / `postinstall` scripts.
+Because modern JavaScript projects have begun to rely heavily on transpilation, this order of execution is less than ideal, because if we are developing a package that uses a `postinstall` script that must be transpiled, it will not be built when the `install` and `postinstall` lifecycle scripts are run.
 
-We can use the `if-dev` binary to address this problem:
+Take the following `package.json` snippet, for example:
+
+```json
+{
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "babel src --out-dir dist",
+    "prepare": "npm run build",
+    "postinstall": "./dist/bin/postinstall.js"
+  }
+}
+```
+
+This will work fine for consumers of our package, who will _only_ be downloading our build artifacts (re: `dist`). But when we try to run `npm install` for this package locally, we will get an error, because the package has not been **prepared** yet, and our `dist` folder does not exist.
+
+We can use the `if-dev` executable to address this problem:
 
 > `package.json`
 
@@ -75,11 +88,27 @@ We can use the `if-dev` binary to address this problem:
 }
 ```
 
-With the above setup, we can guarantee that the package's build artifacts will be generated before `postinstall.js` runs, and `if-dev` will pass when the package is being installed as a dependency.
+This will ensure that for local development, the package is prepared **before** we try to execute `postinstall.js`. When the package is being installed by consumers, `if-dev` will simply no-op and `postinstall.js` will be run immediately. 🙌
 
-## Caveats
+> **Wont this result in "prepare" being executed twice?**
+>
+> Yes. However, this is probably a fair trade-off given the alternative.
 
-With the above configuration, your package's `prepare` script _will_ run twice (both before and after `postinstall`). This will add a small amount of time to `npm install`, but ensures a clean, error-free installation.
+---
+
+Furthermore, it may be the case that we don't want to perform our `postinstall` routine(s) _at all_ when developing locally. In this case, we can use `if-not-dev` to gate the entire `postinstall` script:
+
+> `package.json`
+
+```json
+{
+  "scripts": {
+    "build": "babel src --out-dir dist",
+    "prepare": "npm run build",
+    "postinstall": "if-not-dev ./dist/postinstall.js"
+  }
+}
+```
 
 ## &nbsp;
 <p align="center">
