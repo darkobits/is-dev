@@ -3,11 +3,14 @@ import findRoot from 'find-root';
 import log from './log';
 
 
+const LOG_LABEL = 'isDev';
+
+
 /**
- * Determines if there is more than 1 package.json between us and the top-level
- * directory in the filesystem. If there is, we can assume we have been
- * installed by another package and are therefore a "development" install. If
- * not, then we can assume we are a development install.
+ * - If "npm install" is run from this package, return true.
+ * - If "npm install" is run from this package's direct consumer, return true.
+ * - If "npm install" is run from a consumer of this package's direct consumer,
+ *   return false.
  *
  * @return {boolean}
  */
@@ -16,35 +19,37 @@ function isDev() {
     // This will always be us.
     const ourRoot = findRoot(__dirname);
     const ourName = require(resolve(ourRoot, 'package.json')).name;
-    log.silly('isDev', `"${ourName}" root: ${ourRoot}`);
 
-    // This will be us when we are being developed locally and our dependant
+    log.silly(LOG_LABEL, `"${ourName}" root: ${ourRoot}`);
+
+    // This will be us when we are being developed locally and our dependent
     // when they are being developed locally.
-    const dependantRoot = findRoot(resolve(process.cwd()));
-    const dependantName = require(resolve(dependantRoot, 'package.json')).name;
+    const dependentRoot = findRoot(resolve(process.cwd()));
+    const dependentName = require(resolve(dependentRoot, 'package.json')).name;
 
-    if (dependantName === ourName) {
+    if (dependentName === ourName) {
       return true;
     }
 
-    log.silly('isDev', `"${dependantName}" root: ${dependantRoot}`);
+    log.silly(LOG_LABEL, `"${dependentName}" root: ${dependentRoot}`);
 
-    // This will be falsy when our dependant is being developed locally and our
-    // dependant's dependant when our dependant is being installed.
-    const hostRoot = findRoot(resolve(dependantRoot, '..'));
+    // This will be falsy when our dependent is being developed locally and our
+    // dependent's dependent when our dependent is being installed by... their
+    // dependent.
+    const hostRoot = findRoot(resolve(dependentRoot, '..'));
 
     if (!hostRoot) {
-      log.verbose('isDev', `${dependantName} is being installed locally.`);
+      log.verbose(LOG_LABEL, `${dependentName} is being installed locally.`);
       return true;
     }
 
     const hostName = require(resolve(hostRoot, 'package.json')).name;
 
-    log.silly('isDev', `"${hostName}" root: ${hostRoot}`);
-    log.verbose('isDev', `"${dependantName}" is being installed by "${hostName}".`);
+    log.silly(LOG_LABEL, `"${hostName}" root: ${hostRoot}`);
+    log.verbose(LOG_LABEL, `"${dependentName}" is being installed by "${hostName}".`);
     return false;
   } catch (err) {
-    log.error('isDev', err.message);
+    log.error(LOG_LABEL, err.message);
     throw err;
   }
 }
