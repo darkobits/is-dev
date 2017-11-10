@@ -19,7 +19,6 @@ function isDev() {
     // This will always be us.
     const ourRoot = findRoot(__dirname);
     const ourName = require(resolve(ourRoot, 'package.json')).name;
-
     log.silly(LOG_LABEL, `"${ourName}" root: ${ourRoot}`);
 
     // This will be us when we are being developed locally and our dependent
@@ -34,8 +33,7 @@ function isDev() {
     log.silly(LOG_LABEL, `"${dependentName}" root: ${dependentRoot}`);
 
     // This will be falsy when our dependent is being developed locally and our
-    // dependent's dependent when our dependent is being installed by... their
-    // dependent.
+    // dependent's dependent when our dependent is being installed.
     const hostRoot = findRoot(resolve(dependentRoot, '..'));
 
     if (!hostRoot) {

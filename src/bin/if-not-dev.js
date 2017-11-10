@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-import isDev from '../lib/if-dev';
+import runCommand from '../lib/run-command';
 
-isDev(true);
+runCommand(true);
