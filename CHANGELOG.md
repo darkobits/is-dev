@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.6.0-beta.0"></a>
+# [0.6.0-beta.0](https://github.com/darkobits/is-dev/compare/v0.5.0...v0.6.0-beta.0) (2017-11-30)
+
+
+### Features
+
+* Support Lerna monorepos. ([9a5c557](https://github.com/darkobits/is-dev/commit/9a5c557))
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/darkobits/is-dev/compare/v0.4.1...v0.5.0) (2017-11-10)
 
