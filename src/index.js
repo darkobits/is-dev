@@ -1,3 +1,1 @@
-export {
-  default
-} from './lib/is-dev';
+export {default} from './lib/is-dev';

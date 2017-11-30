@@ -34,16 +34,15 @@
     "prebuild": "run-p clean lint",
     "build": "babel src --out-dir dist",
     "build:watch": "npm run build -- --watch",
-    "prepare": "npm run build",
-    "prepublishOnly": "run-s lint build",
-    "prebump": "npm run prepublishOnly",
+    "prepare": "run-s lint build",
+    "prebump": "npm run prepare",
     "bump": "standard-version",
     "bump:beta": "standard-version --prerelease=beta"
   },
   "dependencies": {
     "@darkobits/log": "^1.0.0",
-    "execa": "^0.8.0",
-    "find-root": "^1.1.0"
+    "caller-path": "^2.0.0",
+    "execa": "^0.8.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
