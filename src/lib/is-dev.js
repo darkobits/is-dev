@@ -1,3 +1,4 @@
+import {existsSync} from 'fs';
 import {resolve} from 'path';
 import findRoot from 'find-root';
 import log from './log';
@@ -23,14 +24,20 @@ function isDev() {
 
     // This will be us when we are being developed locally and our dependent
     // when they are being developed locally.
-    const dependentRoot = findRoot(resolve(process.cwd()));
+    const dependentRoot = findRoot(process.cwd());
     const dependentName = require(resolve(dependentRoot, 'package.json')).name;
+    const dependentIsLernaRepo = existsSync(resolve(dependentRoot, 'lerna.json'));
 
     if (dependentName === ourName) {
       return true;
     }
 
     log.silly(LOG_LABEL, `"${dependentName}" root: ${dependentRoot}`);
+
+    if (dependentIsLernaRepo) {
+      log.verbose(LOG_LABEL, `${dependentName} is being installed locally in a Lerna repository.`);
+      return true;
+    }
 
     // This will be falsy when our dependent is being developed locally and our
     // dependent's dependent when our dependent is being installed.
