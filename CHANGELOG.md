@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.6.0-beta.6"></a>
+# [0.6.0-beta.6](https://github.com/darkobits/is-dev/compare/v0.6.0-beta.5...v0.6.0-beta.6) (2017-12-01)
+
+
+
 <a name="0.6.0-beta.5"></a>
 # [0.6.0-beta.5](https://github.com/darkobits/is-dev/compare/v0.6.0-beta.4...v0.6.0-beta.5) (2017-12-01)
 
