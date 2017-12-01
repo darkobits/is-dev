@@ -19,8 +19,13 @@ function isDev() {
   try {
     // This will always be us.
     const ourRoot = findRoot(__dirname);
-    const ourName = require(resolve(ourRoot, 'package.json')).name;
+    const ourPackageJson = require(resolve(ourRoot, 'package.json'));
+    const ourName = ourPackageJson.name;
     log.silly(LOG_LABEL, `"${ourName}" root: ${ourRoot}`);
+
+    const requiredBy = ourPackageJson._requiredBy;
+
+    log.silly(LOG_LABEL, `_requiredBy:`, requiredBy);
 
     // This will be us when we are being developed locally and our dependent
     // when they are being developed locally.
@@ -46,7 +51,7 @@ function isDev() {
     const hostIsLernaRepo = existsSync(resolve(hostRoot, 'lerna.json'));
 
     if (hostIsLernaRepo) {
-      log.silly(LOG_LABEL, `"${dependentName}" is being installed by ${hostName} in a Lerna repository.`);
+      log.silly(LOG_LABEL, `"${dependentName}" is being installed by "${hostName}" in a Lerna repository.`);
       return true;
     }
 
