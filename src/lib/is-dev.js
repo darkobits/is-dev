@@ -1,10 +1,22 @@
 import {existsSync} from 'fs';
 import {resolve} from 'path';
+import callerPath from 'caller-path';
 import findRoot from 'find-root';
 import log from './log';
 
 
 const LOG_LABEL = 'isDev';
+
+
+/**
+ * Either the thing calling us has 1 package.json above it, or more than 1.
+ *
+ * if 1: the thing calling us is the root package, meaning it has no consumers and is in development
+ * if more than 1:
+ * - the thing calling us is now a dependency of something else, and we are not in development mode
+ * - the thing calling us is inside a package in a monorepo
+ */
+
 
 
 /**
@@ -17,19 +29,19 @@ const LOG_LABEL = 'isDev';
  */
 function isDev() {
   try {
-    // This will always be us.
+    // This will always be our package's root, which may exist as a sibling of
+    // our direct consumer in some other package's node_modules folder.
     const ourRoot = findRoot(__dirname);
-    const ourPackageJson = require(resolve(ourRoot, 'package.json'));
-    const ourName = ourPackageJson.name;
+    const ourName = require(resolve(ourRoot, 'package.json')).name;
     log.silly(LOG_LABEL, `"${ourName}" root: ${ourRoot}`);
 
-    const requiredBy = ourPackageJson._requiredBy;
+    log.silly(LOG_LABEL, process.env);
 
-    log.silly(LOG_LABEL, `_requiredBy:`, requiredBy);
+    // This will resolve to the same directory as above when this package is
+    // being developed locally. It will be our dependent's root directory when
+    // they are being developed locally.
+    const dependentRoot = findRoot(callerPath());
 
-    // This will be us when we are being developed locally and our dependent
-    // when they are being developed locally.
-    const dependentRoot = findRoot(process.cwd());
     const dependentName = require(resolve(dependentRoot, 'package.json')).name;
 
     if (dependentName === ourName) {
