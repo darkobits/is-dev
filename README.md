@@ -12,16 +12,16 @@ $ npm install @darkobits/is-dev
 
 ## Usage
 
-This package exports a constant and provides two executables: `if-dev` and `if-not-dev`.
+This package exports a function and two executables for use in NPM scripts: `if-dev` and `if-not-dev`.
 
-### Constant
+### `isDev`
 
 > `postinstall.js`
 
 ```js
-import IS_DEV from '@darkobits/is-dev';
+import isDev from '@darkobits/is-dev';
 
-if (IS_DEV) {
+if (isDev()) {
   // Package is being installed locally, for development.
 } else {
   // Package is being installed by another package.
