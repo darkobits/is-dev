@@ -1,5 +1,5 @@
 import execa from 'execa';
-import {isDev} from './is-dev';
+import isDev from './is-dev';
 import log from './log';
 
 
