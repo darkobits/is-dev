@@ -1,5 +1,5 @@
 import execa from 'execa';
-import IS_DEV from './is-dev';
+import {isDev} from './is-dev';
 import log from './log';
 
 
@@ -10,6 +10,7 @@ import log from './log';
  */
 export default async function runCommand(invert) {
   const [,, command, ...args] = process.argv;
+  const IS_DEV = isDev(process.cwd());
 
   if (invert ? !IS_DEV : IS_DEV) {
     try {

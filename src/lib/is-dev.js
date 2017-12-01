@@ -27,7 +27,7 @@ const LOG_LABEL = 'isDev';
  *
  * @return {boolean}
  */
-function isDev() {
+export function isDev(path) {
   try {
     // This will always be our package's root, which may exist as a sibling of
     // our direct consumer in some other package's node_modules folder.
@@ -35,16 +35,19 @@ function isDev() {
     const ourName = require(resolve(ourRoot, 'package.json')).name;
     log.silly(LOG_LABEL, `"${ourName}" root: ${ourRoot}`);
 
-    log.silly(LOG_LABEL, process.env);
+    log.silly(LOG_LABEL, 'PACKAGE NAME:', process.env.npm_package_name);
+
+    log.silly(LOG_LABEL, path ? `Using provided path: "${path}"` : `Using caller path: "${callerPath()}"`);
 
     // This will resolve to the same directory as above when this package is
     // being developed locally. It will be our dependent's root directory when
     // they are being developed locally.
-    const dependentRoot = findRoot(callerPath());
+    const dependentRoot = findRoot(path || callerPath());
 
     const dependentName = require(resolve(dependentRoot, 'package.json')).name;
 
     if (dependentName === ourName) {
+      // We were called from somewhere within this package. Bail.
       return true;
     }
 
@@ -60,12 +63,30 @@ function isDev() {
     }
 
     const hostName = require(resolve(hostRoot, 'package.json')).name;
-    const hostIsLernaRepo = existsSync(resolve(hostRoot, 'lerna.json'));
 
-    if (hostIsLernaRepo) {
-      log.silly(LOG_LABEL, `"${dependentName}" is being installed by "${hostName}" in a Lerna repository.`);
+    // Determine if the host package is a Lerna project, meaning our dependent
+    // is nested in a "packages" folder and the "host" is actually the private
+    // root package in the monorepo.
+    const hostIsLernaProject = existsSync(resolve(hostRoot, 'lerna.json'));
+
+    if (hostIsLernaProject) {
+      log.silly(LOG_LABEL, `"${dependentName}" is being installed by "${hostName}" in a Lerna project.`);
       return true;
     }
+
+    // const hostIsYarnProject = existsSync(resolve(hostRoot, 'yarn.lock'));
+
+    // if (hostIsYarnProject) {
+    //   log.silly(LOG_LABEL, `"${dependentName}" is being installed by "${hostName}" in a Yarn project.`);
+    //   return true;
+    // }
+
+    // const hostIsNpm5Project = existsSync(resolve(hostRoot, 'package-lock.json'));
+
+    // if (hostIsNpm5Project) {
+    //   log.silly(LOG_LABEL, `"${dependentName}" is being installed by "${hostName}" in an NPM 5 project.`);
+    //   return true;
+    // }
 
     log.silly(LOG_LABEL, `"${hostName}" root: ${hostRoot}`);
     log.verbose(LOG_LABEL, `"${dependentName}" is being installed by "${hostName}".`);
