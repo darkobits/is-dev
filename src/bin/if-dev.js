@@ -1,5 +1,13 @@
 #!/usr/bin/env node
 
-import runCommand from '../lib/run-command';
+import execa from 'execa';
+import isDev from '../index';
 
-runCommand();
+
+(async function () {
+  if (isDev()) {
+    await execa.shell(process.argv.slice(2).join(' '), {
+      stdio: 'inherit'
+    });
+  }
+})();
