@@ -1,6 +1,6 @@
-[![][npm-img]][npm-url] [![][travis-img]][travis-url] [![][david-img]][david-url] [![][david-dev-img]][david-dev-url] [![][cc-img]][cc-url] [![][xo-img]][xo-url]
+![is-dev](https://user-images.githubusercontent.com/441546/36626699-2feb7f6c-18ec-11e8-8c35-7569e0c0cc0c.png)
 
-# is-dev
+[![][npm-img]][npm-url] [![][travis-img]][travis-url] [![][david-img]][david-url] [![][david-dev-img]][david-dev-url] [![][cc-img]][cc-url] [![][xo-img]][xo-url]
 
 This package provides a way to determine if your package is being installed locally (ex: `npm install`) or by another package (ex: `npm install <your package>`).
 
