@@ -40,16 +40,16 @@
     "bump:beta": "standard-version --prerelease=beta"
   },
   "dependencies": {
-    "@darkobits/log": "^1.0.0",
+    "@darkobits/log": "^1.2.5",
     "execa": "^0.8.0",
     "is-installed-globally": "^0.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "npm-run-all": "^4.1.1",
-    "rimraf": "^2.6.2",
-    "standard-version": "^4.2.0",
+    "babel-preset-env": "^1.7.0",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^2.7.1",
+    "standard-version": "^4.4.0",
     "xo": "^0.18.2"
   },
   "xo": {
