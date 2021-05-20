@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.6.2](https://github.com/darkobits/is-dev/compare/v0.6.1...v0.6.2) (2021-05-20)
+
+
+### 🐞 Bug Fixes
+
+* Fix package.json main entry. ([3ffecf8](https://github.com/darkobits/is-dev/commit/3ffecf8887d60c569454000bb029fd306bd59343))
+
 ### [0.6.1](https://github.com/darkobits/is-dev/compare/v0.6.0...v0.6.1) (2021-05-20)
 
 
