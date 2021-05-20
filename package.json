@@ -2,13 +2,12 @@
   "name": "@darkobits/is-dev",
   "version": "0.6.0",
   "description": "Check if your package is being installed locally or by another package.",
+  "author": "darkobits",
   "license": "WTFPL",
-  "contributors": [
-    {
-      "name": "Joshua Martin",
-      "email": "joshua@frontlawn.net"
-    }
-  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darkobits/is-dev.git"
+  },
   "keywords": [
     "development",
     "dev",
@@ -16,10 +15,6 @@
     "install",
     "local"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/darkobits/is-dev.git"
-  },
   "files": [
     "dist"
   ],
@@ -29,38 +24,14 @@
     "if-not-dev": "./dist/bin/if-not-dev.js"
   },
   "scripts": {
-    "clean": "rimraf dist",
-    "lint": "xo",
-    "prebuild": "run-p clean lint",
-    "build": "babel src --out-dir dist",
-    "build:watch": "npm run build -- --watch",
-    "prepare": "run-s lint build",
-    "prebump": "npm run prepare",
-    "bump": "standard-version",
-    "bump:beta": "standard-version --prerelease=beta"
+    "prepare": "nps prepare"
   },
   "dependencies": {
-    "@darkobits/log": "^1.0.0",
-    "execa": "^0.8.0",
-    "is-installed-globally": "^0.1.0"
+    "@darkobits/log": "^2.0.0-beta.16",
+    "execa": "^5.0.0",
+    "is-installed-globally": "^0.4.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "npm-run-all": "^4.1.1",
-    "rimraf": "^2.6.2",
-    "standard-version": "^4.2.0",
-    "xo": "^0.18.2"
-  },
-  "xo": {
-    "env": [
-      "node"
-    ],
-    "space": true,
-    "rules": {
-      "capitalized-comments": "off",
-      "import/no-unassigned-import": "off",
-      "no-multiple-empty-lines": "off"
-    }
+    "@darkobits/ts": "^0.3.3"
   }
 }

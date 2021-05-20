@@ -1,22 +1,32 @@
-![is-dev](https://user-images.githubusercontent.com/441546/36626699-2feb7f6c-18ec-11e8-8c35-7569e0c0cc0c.png)
+<a href="#top" id="top">
+  <img src="https://user-images.githubusercontent.com/441546/118932597-10060a00-b8fd-11eb-94c5-b6e276976a5d.png" style="max-width: 100%;">
+</a>
+<p align="center">
+    <a href="https://www.npmjs.com/package/@darkobits/is-dev"><img src="https://img.shields.io/npm/v/@darkobits/is-dev.svg?style=flat-square"></a>
+  <a href="https://github.com/darkobits/is-dev/actions"><img src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fdarkobits%2Fis-dev%2Fbadge%3Fref%3Dmaster&style=flat-square&label=build&logo=none"></a>
+  <a href="https://app.codecov.io/gh/darkobits/is-dev/branch/master"><img src="https://img.shields.io/codecov/c/github/darkobits/is-dev/master?style=flat-square"></a>
+  <a href="https://david-dm.org/darkobits/is-dev"><img src="https://img.shields.io/david/darkobits/is-dev.svg?style=flat-square"></a>
+  <a href="https://conventionalcommits.org"><img src="https://img.shields.io/badge/conventional%20commits-1.0.0-027dc6.svg?style=flat-square"></a>
+</p>
 
-[![][npm-img]][npm-url] [![][travis-img]][travis-url] [![][david-img]][david-url] [![][david-dev-img]][david-dev-url] [![][cc-img]][cc-url] [![][xo-img]][xo-url]
-
-This package provides a way to determine if your package is being installed locally (ex: `npm install`) or by another package (ex: `npm install <your package>`).
+This package provides a way to determine if your package is being installed locally (ex: `npm install`)
+or by another package (ex: `npm install <your package>`).
 
 ## Installation
 
-```bash
+```sh
 $ npm install @darkobits/is-dev
 ```
 
 ## Usage
 
-This package is designed to be used as part of a lifecycle script or in files that run during lifecycle scripts. It provides a function and two binaries: `if-dev` and `if-not-dev`.
+This package is designed to be used as part of a lifecycle script or in files that run during lifecycle
+scripts. It provides a function, `isDev`, and two binaries, `if-dev` and `if-not-dev`.
 
 ### `isDev(): boolean`
 
-Returns `true` if the package is the host package, `false` if it is a dependency or if the package is installed globally.
+Returns `true` if the package is the host package, `false` if it is a dependency or if the package is
+installed globally.
 
 > `postinstall.js`
 
@@ -49,15 +59,19 @@ if (isDev()) {
 
 ## Use Cases
 
-NPM runs the following [lifecycle scripts](https://docs.npmjs.com/misc/scripts) (among others) in the following order:
+NPM runs the following [lifecycle scripts](https://docs.npmjs.com/misc/scripts) (among others) in the
+following order:
 
-|Script|Runs|Typical Use Case|
-|---|---|---|
-|`install`|Always|Set up package for use by consuming packages.|
-|`postinstall`|Always|See above.|
-|`prepare`|Development (`npm install`) Only|Generate package's build artifacts.|
+| Script        | Runs                             | Typical Use Case                              |
+|---------------|----------------------------------|-----------------------------------------------|
+| `install`     | Always                           | Set up package for use by consuming packages. |
+| `postinstall` | Always                           | See above.                                    |
+| `prepare`     | Development (`npm install`) Only | Generate package's build artifacts.           |
 
-Because modern JavaScript projects have begun to rely heavily on transpilation, this order of execution is less than ideal. If, for example, we are developing a package that uses a `postinstall` script that must be transpiled, it will not have been built when the `install` and `postinstall` lifecycle scripts are run.
+Because modern JavaScript projects have begun to rely heavily on transpilation, this order of execution
+is less than ideal. If, for example, we are developing a package that uses a `postinstall` script that
+must be transpiled, it will not have been built when the `install` and `postinstall` lifecycle scripts
+are run.
 
 Take the following `package.json` snippet, for example:
 
@@ -74,7 +88,9 @@ Take the following `package.json` snippet, for example:
 }
 ```
 
-This will work fine for consumers of our package, who will _only_ be downloading our build artifacts (re: `dist`). But when we try to run `npm install` when this package is the host, we will get an error, because the package has not been **prepared** yet, and our `dist` folder does not exist.
+This will work fine for consumers of our package, who will _only_ be downloading our build artifacts
+(re: `dist`). But when we try to run `npm install` when this package is the host, we will get an error,
+because the package has not been **prepared** yet, and our `dist` folder does not exist.
 
 We can use `if-dev` to address this problem:
 
@@ -90,9 +106,15 @@ We can use `if-dev` to address this problem:
 }
 ```
 
-This will ensure that for local development, the package is prepared **before** we try to execute `postinstall.js`. When the package is being installed by consumers, `if-dev` will simply no-op and `postinstall.js` will be run immediately.
+This will ensure that for local development, the package is prepared **before** we try to execute
+`postinstall.js`. When the package is being installed by consumers, `if-dev` will simply no-op and
+`postinstall.js` will be run immediately.
 
-Alternatively, we **only** run the `postinstall` script when the package is being installed as a dependency:
+---
+
+Alternatively, imagine we have a `postinstall` script that we don't want to run during local
+development. We can use `if-not-dev` to no-op the `postinstall` script/command unless the package is
+being installed by a consumer:
 
 ```json
 {
@@ -104,26 +126,6 @@ Alternatively, we **only** run the `postinstall` script when the package is bein
 }
 ```
 
-## &nbsp;
-<p align="center">
-  <br>
-  <img width="22" height="22" src="https://cloud.githubusercontent.com/assets/441546/25318539/db2f4cf2-2845-11e7-8e10-ef97d91cd538.png">
-</p>
-
-[npm-img]: https://img.shields.io/npm/v/@darkobits/is-dev.svg?style=flat-square
-[npm-url]: https://www.npmjs.com/package/@darkobits/is-dev
-
-[travis-img]: https://img.shields.io/travis/darkobits/is-dev.svg?style=flat-square
-[travis-url]: https://travis-ci.org/darkobits/is-dev
-
-[david-img]: https://img.shields.io/david/darkobits/is-dev.svg?style=flat-square
-[david-url]: https://david-dm.org/darkobits/is-dev
-
-[david-dev-img]: https://img.shields.io/david/dev/darkobits/is-dev.svg?style=flat-square
-[david-dev-url]: https://david-dm.org/darkobits/is-dev?type=dev
-
-[cc-img]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=flat-square
-[cc-url]: https://github.com/conventional-changelog/standard-version
-
-[xo-img]: https://img.shields.io/badge/code_style-XO-e271a5.svg?style=flat-square
-[xo-url]: https://github.com/sindresorhus/xo
+<a href="#top">
+  <img src="https://user-images.githubusercontent.com/441546/118062198-4ff04e80-b34b-11eb-87f3-406a345d5526.png" style="max-width: 100%;">
+</a>
