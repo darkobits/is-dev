@@ -1,6 +1,6 @@
 {
   "name": "@darkobits/is-dev",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Check if your package is being installed locally or by another package.",
   "author": "darkobits",
   "license": "WTFPL",
