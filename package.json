@@ -18,7 +18,7 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/index.js",
+  "main": "./dist/is-dev.js",
   "bin": {
     "if-dev": "./dist/bin/if-dev.js",
     "if-not-dev": "./dist/bin/if-not-dev.js"
